@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AJAX Example</title>
+  </head>
+  <body>
+    <h1>AJAX Example</h1>
+    <button id="loadData">Load Data</button>
+    <div id="result"></div>
+
+    <script>
+      const apiURL = "https://jsonplaceholder.typicode.com";
+      const loadBtn = document.getElementById("loadData");
+      const result = document.getElementById("result");
+
+      loadBtn.addEventListener("click", () => {
+        // Creating an XMLHttpRequest object
+        var xhr = new XMLHttpRequest();
+
+        // Configuring it: GET-request for the URL /users
+        xhr.open("GET", `${apiURL}/users`, true);
+
+        // Handle the response
+        xhr.onload = function () {
+          if (xhr.status >= 200 && xhr.status < 400) {
+            var users = JSON.parse(xhr.responseText);
+            displayUsers(users);
+          } else {
+            result.innerHTML = "Error loading data.";
+          }
+        };
+
+        // Handle network errors
+        xhr.onerror = function () {
+          result.innerHTML = "Request error.";
+        };
+
+        // Send the request
+        xhr.send();
+      });
+
+      function displayUsers(users) {
+        let html = "<h2>List of users:</h2><ol>";
+        users.forEach((user) => {
+          html += `<li>${user.name} (${user.email})</li>`;
+        });
+        html += "</ol>";
+        result.innerHTML = html;
+      }
+    </script>
+  </body>
+</html>
